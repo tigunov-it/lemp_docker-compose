@@ -1,0 +1,12 @@
+[mysqld]
+
+skip-host-cache
+skip-name-resolve
+
+server-id=4
+binlog_format=ROW
+log_bin = mysql-bin.log
+binlog_do_db = gb_hiload
+
+collation-server     = utf8mb4_unicode_ci
+character-set-server = utf8mb4

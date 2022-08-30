@@ -1,0 +1,3 @@
+CREATE USER slave_read_user@'%' IDENTIFIED BY 'xSc1jnBR6r8GW9gQgNvdKsVqGDqm5l';
+GRANT REPLICATION SLAVE ON *.* TO slave_read_user@'%';
+FLUSH PRIVILEGES;
