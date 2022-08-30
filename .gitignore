@@ -2,7 +2,7 @@
 .env.master
 .env.slave
 .data
-
+.idea
 
 
 ### JetBrains template
