@@ -15,7 +15,7 @@ services:
             networks:
                 - gb_hiload-network
             ports:
-                - "900:9000"
+                - "9000:9000"
             volumes:
                 - ./../gb_hiload:/gb_hiload:rw,cached
                 - gb_hiload_log:/gb_hiload/var/log
@@ -27,7 +27,7 @@ services:
                 - db-master
 
         gb_hiload1:
-            container_name: gb_hiload
+            container_name: gb_hiload1
             build:
                 context: ./php-fpm
                 args:
@@ -47,7 +47,7 @@ services:
                 - db-master
 
         gb_hiload2:
-            container_name: gb_hiload
+            container_name: gb_hiload2
             build:
                 context: ./php-fpm
                 args:
@@ -67,7 +67,7 @@ services:
                 - db-master
 
         gb_hiload3:
-            container_name: gb_hiload
+            container_name: gb_hiload3
             build:
                 context: ./php-fpm
                 args:
