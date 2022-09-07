@@ -52,12 +52,16 @@ services:
         redis:
             container_name: redis
             image: redis:latest
+            ports:
+                -   "6379:6379"
             networks:
                 - gb_hiload-network
 
         memcached:
             container_name: memcached
             image: memcached:latest
+            ports:
+                -   "11211:11211"
             networks:
                 - gb_hiload-network
 
