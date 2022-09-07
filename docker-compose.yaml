@@ -26,6 +26,66 @@ services:
                 - memcached
                 - db-master
 
+        gb_hiload1:
+            container_name: gb_hiload
+            build:
+                context: ./php-fpm
+                args:
+                    - timezone=${TZ}
+            networks:
+                - gb_hiload-network
+            ports:
+                - "9001:9000"
+            volumes:
+                - ./../gb_hiload:/gb_hiload:rw,cached
+                - gb_hiload_log:/gb_hiload/var/log
+            env_file:
+                - .env
+            depends_on:
+                - redis
+                - memcached
+                - db-master
+
+        gb_hiload2:
+            container_name: gb_hiload
+            build:
+                context: ./php-fpm
+                args:
+                    - timezone=${TZ}
+            networks:
+                - gb_hiload-network
+            ports:
+                - "9002:9000"
+            volumes:
+                - ./../gb_hiload:/gb_hiload:rw,cached
+                - gb_hiload_log:/gb_hiload/var/log
+            env_file:
+                - .env
+            depends_on:
+                - redis
+                - memcached
+                - db-master
+
+        gb_hiload3:
+            container_name: gb_hiload
+            build:
+                context: ./php-fpm
+                args:
+                    - timezone=${TZ}
+            networks:
+                - gb_hiload-network
+            ports:
+                - "9003:9000"
+            volumes:
+                - ./../gb_hiload:/gb_hiload:rw,cached
+                - gb_hiload_log:/gb_hiload/var/log
+            env_file:
+                - .env
+            depends_on:
+                - redis
+                - memcached
+                - db-master
+
         nginx:
             container_name: nginx
             build:
