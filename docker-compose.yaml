@@ -6,212 +6,225 @@ networks:
 
 services:
 
-        gb_hiload:
-            container_name: gb_hiload
-            build:
-                context: ./php-fpm
-                args:
-                    - timezone=${TZ}
-            networks:
-                - gb_hiload-network
-            ports:
-                - "9000:9000"
-            volumes:
-                - ./../gb_hiload:/gb_hiload:rw,cached
-                - gb_hiload_log:/gb_hiload/var/log
-            env_file:
-                - .env
-            depends_on:
-                - redis
-                - memcached
-                - db-master
+  gb_hiload:
+    container_name: gb_hiload
+    build:
+      context: ./php-fpm
+      args:
+        - timezone=${TZ}
+    networks:
+      - gb_hiload-network
+    ports:
+      - "9000:9000"
+    volumes:
+      - ./../gb_hiload:/gb_hiload:rw,cached
+      - gb_hiload_log:/gb_hiload/var/log
+    env_file:
+      - .env
+    depends_on:
+      - redis
+      - memcached
+      - db-master
 
-        gb_hiload1:
-            container_name: gb_hiload1
-            build:
-                context: ./php-fpm
-                args:
-                    - timezone=${TZ}
-            networks:
-                - gb_hiload-network
-            ports:
-                - "9001:9000"
-            volumes:
-                - ./../gb_hiload:/gb_hiload:rw,cached
-                - gb_hiload_log:/gb_hiload/var/log
-            env_file:
-                - .env
-            depends_on:
-                - redis
-                - memcached
-                - db-master
+  gb_hiload1:
+    container_name: gb_hiload1
+    build:
+      context: ./php-fpm
+      args:
+        - timezone=${TZ}
+    networks:
+      - gb_hiload-network
+    ports:
+      - "9001:9000"
+    volumes:
+      - ./../gb_hiload:/gb_hiload:rw,cached
+      - gb_hiload_log:/gb_hiload/var/log
+    env_file:
+      - .env
+    depends_on:
+      - redis
+      - memcached
+      - db-master
 
-        gb_hiload2:
-            container_name: gb_hiload2
-            build:
-                context: ./php-fpm
-                args:
-                    - timezone=${TZ}
-            networks:
-                - gb_hiload-network
-            ports:
-                - "9002:9000"
-            volumes:
-                - ./../gb_hiload:/gb_hiload:rw,cached
-                - gb_hiload_log:/gb_hiload/var/log
-            env_file:
-                - .env
-            depends_on:
-                - redis
-                - memcached
-                - db-master
+  gb_hiload2:
+    container_name: gb_hiload2
+    build:
+      context: ./php-fpm
+      args:
+        - timezone=${TZ}
+    networks:
+      - gb_hiload-network
+    ports:
+      - "9002:9000"
+    volumes:
+      - ./../gb_hiload:/gb_hiload:rw,cached
+      - gb_hiload_log:/gb_hiload/var/log
+    env_file:
+      - .env
+    depends_on:
+      - redis
+      - memcached
+      - db-master
 
-        gb_hiload3:
-            container_name: gb_hiload3
-            build:
-                context: ./php-fpm
-                args:
-                    - timezone=${TZ}
-            networks:
-                - gb_hiload-network
-            ports:
-                - "9003:9000"
-            volumes:
-                - ./../gb_hiload:/gb_hiload:rw,cached
-                - gb_hiload_log:/gb_hiload/var/log
-            env_file:
-                - .env
-            depends_on:
-                - redis
-                - memcached
-                - db-master
+  gb_hiload3:
+    container_name: gb_hiload3
+    build:
+      context: ./php-fpm
+      args:
+        - timezone=${TZ}
+    networks:
+      - gb_hiload-network
+    ports:
+      - "9003:9000"
+    volumes:
+      - ./../gb_hiload:/gb_hiload:rw,cached
+      - gb_hiload_log:/gb_hiload/var/log
+    env_file:
+      - .env
+    depends_on:
+      - redis
+      - memcached
+      - db-master
 
-        nginx:
-            container_name: nginx
-            build:
-                context: ./nginx
-                args:
-                    - timezone=${TZ}
-            ports:
-                - "81:80"
-                - "443:443"
-            networks:
-                - gb_hiload-network
-            depends_on:
-                - gb_hiload
-            volumes:
-                - ./../gb_hiload/public:/gb_hiload/public
-                - ./nginx/ssl:/etc/nginx/ssl
-                - ./nginx/conf.d:/etc/nginx/conf.d
-                - ./nginx/nginx_log:/var/log/nginx
-                - ./nginx/nginx.conf:/etc/nginx/nginx.conf
-            env_file:
-                - .env
-            command: /bin/bash -c "exec nginx -g 'daemon off;'"
+  nginx:
+    container_name: nginx
+    build:
+      context: ./nginx
+      args:
+        - timezone=${TZ}
+    ports:
+      - "81:80"
+      - "443:443"
+    networks:
+      - gb_hiload-network
+    depends_on:
+      - gb_hiload
+    volumes:
+      - ./../gb_hiload/public:/gb_hiload/public
+      - ./nginx/ssl:/etc/nginx/ssl
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./nginx/nginx_log:/var/log/nginx
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    env_file:
+      - .env
+    command: /bin/bash -c "exec nginx -g 'daemon off;'"
 
-        redis:
-            container_name: redis
-            image: redis:latest
-            ports:
-                -   "6379:6379"
-            networks:
-                - gb_hiload-network
+  redis:
+    container_name: redis
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    networks:
+      - gb_hiload-network
 
-        memcached:
-            container_name: memcached
-            image: memcached:latest
-            ports:
-                -   "11211:11211"
-            networks:
-                - gb_hiload-network
+  memcached:
+    container_name: memcached
+    image: memcached:latest
+    ports:
+      - "11211:11211"
+    networks:
+      - gb_hiload-network
 
-        db-master:
-            container_name: db-master
-            image: mariadb:latest
-            env_file:
-                - ./db/master/.env.master
-            volumes:
-                - ./db/master/master.sql:/docker-entrypoint-initdb.d/start.sql
-                - ./db/master/mysql.master.cnf:/etc/mysql/conf.d/mysql.master.cnf
-                - ./db/master/.data/mysql:/var/lib/mysql:rw
-            ports:
-                - "3307:3306"
-            networks:
-                - gb_hiload-network
+  db-master:
+    container_name: db-master
+    image: mariadb:latest
+    env_file:
+      - ./db/master/.env.master
+    volumes:
+      - ./db/master/master.sql:/docker-entrypoint-initdb.d/start.sql
+      - ./db/master/mysql.master.cnf:/etc/mysql/conf.d/mysql.master.cnf
+      - ./db/master/.data/mysql:/var/lib/mysql:rw
+    ports:
+      - "3307:3306"
+    networks:
+      - gb_hiload-network
 
-        maria-db-slave-1:
-            container_name: maria-db-slave-1
-            image: mariadb:latest
-            env_file:
-                - ./db/slaves/email/.env.slave
-            volumes:
-                - ./db/slaves/slave.sql:/docker-entrypoint-initdb.d/start.sql
-                - ./db/slaves/email/mysql.slave.cnf:/etc/mysql/conf.d/mysql.slave.cnf
-                - ./db/slaves/email/.data/mysql:/var/lib/mysql:rw
-            ports:
-                - "3308:3306"
-            networks:
-                - gb_hiload-network
+  maria-db-slave-1:
+    container_name: maria-db-slave-1
+    image: mariadb:latest
+    env_file:
+      - ./db/slaves/email/.env.slave
+    volumes:
+      - ./db/slaves/slave.sql:/docker-entrypoint-initdb.d/start.sql
+      - ./db/slaves/email/mysql.slave.cnf:/etc/mysql/conf.d/mysql.slave.cnf
+      - ./db/slaves/email/.data/mysql:/var/lib/mysql:rw
+    ports:
+      - "3308:3306"
+    networks:
+      - gb_hiload-network
 
-        maria-db-slave-2:
-            container_name: maria-db-slave-2
-            image: mariadb:latest
-            env_file:
-                - ./db/slaves/sms/.env.slave
-            volumes:
-                - ./db/slaves/slave.sql:/docker-entrypoint-initdb.d/start.sql
-                - ./db/slaves/sms/mysql.slave.cnf:/etc/mysql/conf.d/mysql.slave.cnf
-                - ./db/slaves/sms/.data/mysql:/var/lib/mysql:rw
-            ports:
-                - "3309:3306"
-            networks:
-                - gb_hiload-network
+  maria-db-slave-2:
+    container_name: maria-db-slave-2
+    image: mariadb:latest
+    env_file:
+      - ./db/slaves/sms/.env.slave
+    volumes:
+      - ./db/slaves/slave.sql:/docker-entrypoint-initdb.d/start.sql
+      - ./db/slaves/sms/mysql.slave.cnf:/etc/mysql/conf.d/mysql.slave.cnf
+      - ./db/slaves/sms/.data/mysql:/var/lib/mysql:rw
+    ports:
+      - "3309:3306"
+    networks:
+      - gb_hiload-network
 
-        maria-db-slave-3:
-            container_name: maria-db-slave-3
-            image: mariadb:latest
-            env_file:
-                - ./db/slaves/telegram/.env.slave
-            volumes:
-                - ./db/slaves/slave.sql:/docker-entrypoint-initdb.d/start.sql
-                - ./db/slaves/telegram/mysql.slave.cnf:/etc/mysql/conf.d/mysql.slave.cnf
-                - ./db/slaves/telegram/.data/mysql:/var/lib/mysql:rw
-            ports:
-                - "3310:3306"
-            networks:
-                - gb_hiload-network
+  maria-db-slave-3:
+    container_name: maria-db-slave-3
+    image: mariadb:latest
+    env_file:
+      - ./db/slaves/telegram/.env.slave
+    volumes:
+      - ./db/slaves/slave.sql:/docker-entrypoint-initdb.d/start.sql
+      - ./db/slaves/telegram/mysql.slave.cnf:/etc/mysql/conf.d/mysql.slave.cnf
+      - ./db/slaves/telegram/.data/mysql:/var/lib/mysql:rw
+    ports:
+      - "3310:3306"
+    networks:
+      - gb_hiload-network
 
-        maria-db-slave-4:
-            container_name: maria-db-slave-4
-            image: mariadb:latest
-            env_file:
-                - ./db/slaves/api/.env.slave
-            volumes:
-                - ./db/slaves/slave.sql:/docker-entrypoint-initdb.d/start.sql
-                - ./db/slaves/api/mysql.slave.cnf:/etc/mysql/conf.d/mysql.slave.cnf
-                - ./db/slaves/api/.data/mysql:/var/lib/mysql:rw
-            ports:
-                - "3311:3306"
-            networks:
-                - gb_hiload-network
+  maria-db-slave-4:
+    container_name: maria-db-slave-4
+    image: mariadb:latest
+    env_file:
+      - ./db/slaves/api/.env.slave
+    volumes:
+      - ./db/slaves/slave.sql:/docker-entrypoint-initdb.d/start.sql
+      - ./db/slaves/api/mysql.slave.cnf:/etc/mysql/conf.d/mysql.slave.cnf
+      - ./db/slaves/api/.data/mysql:/var/lib/mysql:rw
+    ports:
+      - "3311:3306"
+    networks:
+      - gb_hiload-network
 
-#        db-master:
-#            container_name: db-master
-#            image: mysql:latest
-#            env_file:
-#                - ./db/master/.env.master
-#            ports:
-#                - "4406:3306"
-#            volumes:
-#                - ./db/master/master.sql:/docker-entrypoint-initdb.d/start.sql
-#                - ./db/master/mysql.master.cnf:/etc/mysql/conf.d/mysql.master.cnf
-#                - ./db/master/.data/mysql:/var/lib/mysql:rw
-#            networks:
-#                - gb_hiload-network
+  #        db-master:
+  #            container_name: db-master
+  #            image: mysql:latest
+  #            env_file:
+  #                - ./db/master/.env.master
+  #            ports:
+  #                - "4406:3306"
+  #            volumes:
+  #                - ./db/master/master.sql:/docker-entrypoint-initdb.d/start.sql
+  #                - ./db/master/mysql.master.cnf:/etc/mysql/conf.d/mysql.master.cnf
+  #                - ./db/master/.data/mysql:/var/lib/mysql:rw
+  #            networks:
+  #                - gb_hiload-network
+  rabbit:
+    container_name: rabbitMQ
+    build: ./rabbitMQ
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - ./rabbitMQ/data/mnesia:/var/lib/rabbitmq/mnesia
+      - ./rabbitMQ/log:/var/log/rabbit:rw
+      - ./rabbitMQ/init.sh:/init.sh
+    hostname: rabbitMQ
+    networks:
+      - gb_hiload-network
 
 volumes:
-    nginx_log:
-    gb_hiload_log:
-    db:
-        driver: local
+  nginx_log:
+  gb_hiload_log:
+  db:
+    driver: local
 
